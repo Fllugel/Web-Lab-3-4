@@ -103,7 +103,12 @@ export default {
         this.errorMessage = '';
       } catch (error) {
         console.error('Error enrolling in course:', error);
-        this.errorMessage = 'Enrollment failed. Please try again.';
+        if (error.response && error.response.status === 400 && error.response.data && error.response.data.error) {
+          // Display the specific error message if the course is already enrolled
+          this.errorMessage = error.response.data.error;
+        } else {
+          this.errorMessage = 'Enrollment failed. Please try again.';
+        }
         this.successMessage = '';
       }
     }
